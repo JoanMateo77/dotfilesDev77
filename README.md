@@ -1,11 +1,42 @@
-# dots
+# dots: reproducible dev environment with Nix and a Go TUI
+
+> **Origin.** This repository is based on
+> [sanurb/.dotfiles](https://github.com/sanurb/.dotfiles) by David Urbano
+> (MIT, see [LICENSE](./LICENSE)). The `dots` CLI, the Nix and Home Manager
+> modules, and the CI and release pipeline are his work. I use it as my own
+> development environment on macOS (Apple Silicon); my changes are listed in
+> [What I changed](#what-i-changed).
 
 Interactive frontend for a Nix-managed personal environment. The Go binary is
 the user-facing layer; Moon + Nix + Home Manager are the deterministic
 backend. `dots` never mutates `~/` directly — it scans, prompts, and delegates
 to `moon run modules:<task>`.
 
+**Who it is for:** developers on macOS or Linux who want to pick their shell,
+terminal, font, multiplexer and editor once in a wizard, and get the same
+environment on every machine, with a plan they can review before applying and
+a rollback to the previous Home Manager generation.
+
+**Stack:** Go 1.26 with Bubble Tea, Bubbles and Lip Gloss (TUI) · Nix flakes,
+Home Manager and devenv · Moon 1.40 and proto (tasks and pinned runtimes, see
+`.prototools`) · GoReleaser with cosign keyless signing · Renovate · GitHub
+Actions (`.github/workflows/`).
+
+## What I changed
+
+- **Install notes from a fresh Apple Silicon Mac**
+  ([docs/personal-setup.md](./docs/personal-setup.md), in Spanish): Determinate
+  Nix `trusted-users` so binary caches are used, Nix paths for Fish launched
+  from a GUI terminal, Starship after direnv activates the dev shell, and a
+  `dots doctor` false positive for Ghostty on macOS.
+- **Shell prompt:** a Fish hook that re-runs `starship init` on prompt
+  (`config/fish/conf.d/starship.fish`) and a custom prompt glyph
+  (`config/starship/starship.toml`).
+
 ## Installation
+
+The install channels below (Homebrew tap, curl script and `nix run`) are the
+upstream ones and install the upstream `dots` release.
 
 `dots` is two components: a TUI binary that writes a profile, and a Nix
 flake + Home Manager modules that realize the profile into `$HOME`. The
@@ -104,6 +135,11 @@ dots apply         # realize the workspace
 
 See `DESIGN.md` for the architecture and `devenv.nix` for the declared
 toolchain.
+
+---
+
+Maintained by [Joan Mateo Cardona](https://github.com/JoanMateo77), based on
+[sanurb/.dotfiles](https://github.com/sanurb/.dotfiles) by David Urbano.
 
 [direnv]: https://direnv.net/
 [tap]: https://github.com/sanurb/homebrew-tap
